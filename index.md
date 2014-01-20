@@ -1,6 +1,6 @@
 ---
 layout: page
-title: He`L`lo `X`orl`b`!
+title: HeLlo Xorlb!
 tagline: Supporting tagline
 ---
 {% include JB/setup %}
