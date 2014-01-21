@@ -1,8 +1,8 @@
 ---
 layout: post
 title: "Hello World"
-description: ""
-category: 
-tags: []
+description: "BLxG's bootstrap"
+category: web
+tags: [jekyll, github]
 ---
 {% include JB/setup %}
