@@ -4,6 +4,7 @@ title: "Hello World"
 description: "BLxG's bootstrap"
 category: web
 tags: [jekyll, github]
+tagline: "in c language"
 ---
 
 ```c
