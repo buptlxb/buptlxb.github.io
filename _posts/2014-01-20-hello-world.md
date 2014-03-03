@@ -2,8 +2,8 @@
 layout: post
 title: "Hello World"
 description: "BLxG's bootstrap"
-category: web
-tags: [jekyll, github]
+category: "C/CPP"
+tags: ["C/CPP"]
 tagline: "in c language"
 ---
 

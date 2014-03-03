@@ -1,8 +1,8 @@
 ---
 layout: post
 title: "apt-get error"
-description: ""
-category: 
+description: "an error occured when using apt-get"
+category: "linux"
 tags: ["ubuntu", "linux"]
 ---
 
