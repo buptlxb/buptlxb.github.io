@@ -1,7 +1,7 @@
 ---
 layout: page
 title: HeLlo Xorlb!
-tagline: LXB's hello world
+tagline: "  Welcome to LXB's world"
 ---
 {% include JB/setup %}
 
