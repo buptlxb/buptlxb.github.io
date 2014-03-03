@@ -30,14 +30,14 @@ BIOS(`Basic Input/Output System`) 是大部分人都会说的一个词，说起�
 
 ## Bochs--虚拟的力量
 
-`bochs`是一种x86虚拟机，用来调试操作系统是个不错的选择，写`qemu`相比，它更小巧，同样也是开源免费，更多的内容可以到![wikipedia](http://en.wikipedia.org/wiki/Bochs)去了解。
+`bochs`是一种x86虚拟机，用来调试操作系统是个不错的选择，写`qemu`相比，它更小巧，同样也是开源免费，更多的内容可以到[wikipedia](http://en.wikipedia.org/wiki/Bochs)去了解。
 
 #### 安装
 
 对于ubuntu用户，直接使用`sudo apt-get install bochs`即可完成安装，对于安装中出现的问题，google一下，大部分都能解决，不能解决的我也解决不了。。。
 这样安装虽然简单易用，但安装的bochs是不带debug功能的。
 
-所以我个人推荐下载源码自己编译安装，在![这里](http://sourceforge.net/projects/bochs/files/bochs/)可以找到bochs的源码。我下载的是bochs-2.6.2.tar.gz，安装方法也很简单。
+所以我个人推荐下载源码自己编译安装，在[这里](http://sourceforge.net/projects/bochs/files/bochs/)可以找到bochs的源码。我下载的是bochs-2.6.2.tar.gz，安装方法也很简单。
 
 + 解压源码包
  	
