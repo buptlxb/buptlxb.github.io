@@ -13,7 +13,7 @@ tagline: "Create the boot section of OS!"
 
 #### 志继
 
-从[上一篇文章](/linux/2014/03/03/trace-linux-kernel-with-bochs1/)中，我们知道了BIOS通过`INT 0x19`将硬盘(软盘)的｀0｀号磁头(head)，`0`号磁道(track),`第一个`扇区(sector)读入到`0x07c00`的内存位置上。这个扇区就称作`boot section`。BIOS跳转到这里开始执行，boot section的代码。
+从[上一篇文章](/linux/2014/03/03/trace-linux-kernel-with-bochs1/)中，我们知道了BIOS通过`INT 0x19`将硬盘(软盘)的`0`号磁头(head)，`0`号磁道(track),`第一个`扇区(sector)读入到`0x07c00`的内存位置上。这个扇区就称作`boot section`。BIOS跳转到这里开始执行，boot section的代码。
 
 #### 规划
 
