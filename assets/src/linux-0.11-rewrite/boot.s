@@ -1,20 +1,3 @@
----
-layout: post
-title: "Trace Linux Kernel With Bochs(3)"
-description: "rewrite the bootsect.s"
-category: "Linux"
-tags: ["linux", "bochs", "os"]
-tabline: "rewrite the bootsect.s"
----
-
-	这里我们将重写bootsect.s完成其真正的功能，重写使用AT&T汇编。
-
-## bootsect.s
-
-#### 内存规划
-
-``` asm
-
 .code16 #use 16bit
 .text #code segment start
 
@@ -30,11 +13,6 @@ ENDSEG   = SYSSEG + SYSSIZE		# where to stop loading
 #			0x301 - first partition on first drive etc
 ROOT_DEV = 0x306
 
-```
-
-#### bootsect将自己复制到0x90000处
-
-``` asm
 	movw %cs, %ax #cs:ip was initialized by BOIS instruction 'jmpi 0, 0x07c0'
 	movw %ax, %ds #initialize ds, es and ss with cs
 	movw %ax, %es
@@ -48,12 +26,6 @@ ROOT_DEV = 0x306
 	xor %di, %di
 	rep
 	movsw
-
-```
-
-#### 跳到复制后的地方*继续*执行
-
-``` asm
 	ljmp $INITSEG, $go
 go:
 	movw %cs, %ax
@@ -62,12 +34,6 @@ go:
 # put stack at 0x9ff00
 	movw %ax, %ss
 	movw $0xFF00, %sp	# arbitrary value >> 512
-
-```
-
-#### 将setup section加载至内存
-
-``` asm
 
 load_setup:
 	movw $0x0000, %dx	# DL = drive 0, DH = head 0
@@ -80,11 +46,6 @@ load_setup:
 	movw $0x0000, %ax	#reset the diskette
 	int $0x13
 	jmp load_setup
-
-```
-#### 获得每磁道的扇区数
-
-``` asm
 
 ok_load_setup:
 	
@@ -101,11 +62,6 @@ ok_load_setup:
 	movw $INITSEG, %ax
 	movw %ax, %es
 
-```
-
-#### 打印提示信息
-
-``` asm
 # Print some inane message
 
 	movb $0x03, %ah	# read cursor pos (AH = function number)
@@ -123,24 +79,13 @@ ok_load_setup:
 						# bit 1:string contains attribute
 	int $0x10
 
-```
-
-#### 将system section加载至内存
-
-``` asm
-# ok, we have written the message, now
+# ok, we've written the message, now
 # we want to load the system (at 0x10000)
 
 	movw $SYSSEG, %ax
 	movw %ax, %es	# segment of 0x10000
 	call read_it
 	call kill_motor
-
-```
-
-#### 检查根设备
-
-``` asm
 
 # After that we check which root-device to use. if the device is
 # defined (!= 0), nothing is done and the given device is used.
@@ -162,23 +107,12 @@ undef_root:
 root_defined:
 	movw %ax, %cs:root_dev
 
-```
-
-#### 开始执行setup.s
-
-``` asm
-
 # after that (everything loaded), we jump to 
 # the setup-routine loaded directly after
 # the bootblock:
 
 	ljmp $SETUPSEG, $0x0
 
-```
-
-#### 读取system section子程序
-
-``` asm
 # This routine loads the system at address 0x10000, making sure
 # no 64kB boundaries are crossed. We try to load it as fast as
 # possible, loading whole tracks whenever we can.
@@ -271,13 +205,7 @@ bad_rt:
 	
 # This procedure turns off the floppy drive motor, so
 # that we enter the kernel in a known state, and
-# don not have to worry about it later.
-
-```
-
-#### 关闭马达
-
-``` asm
+# don't have to worry about it later.
 
 kill_motor:
 	push %dx
@@ -286,12 +214,6 @@ kill_motor:
 	outb %al, %dx
 	pop %dx
 	ret
-
-```
-
-#### 用到的一些变量
-
-``` asm
 
 sectors:
 	.word 0
@@ -307,12 +229,3 @@ root_dev:
 boot_flag:
 	.word 0xAA55
 
-```
-
-完整的代码可以在[这里](/assets/src/linux-0.11-rewrite/boot.s)下载
-
-## 存在的问题
-
-1. 这里在读取完setup section(4个sectors)，并不是像很多书上说的读240个扇区，而是读了0x30000个字节，也就是374个扇区？
-
-{% include JB/setup %}

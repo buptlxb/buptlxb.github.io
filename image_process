@@ -1,0 +1,13 @@
+#!/bin/bash
+# copy image from SOURCE folder to DESTINATION folder
+# conver the size if it width > 580
+
+SOURCE = "~/Pictures"
+DESTINATION = "./assets/images/"
+
+IMAGES = find ${SOURCE} -name "*.png" -mtime -1
+
+cp ${IMAGES} ${DESTINATION}
+
+
+
