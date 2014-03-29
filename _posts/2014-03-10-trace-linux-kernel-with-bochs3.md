@@ -313,6 +313,6 @@ boot_flag:
 
 ## 存在的问题
 
-1. 这里在读取完setup section(4个sectors)，并不是像很多书上说的读240个扇区，而是读了0x30000个字节，也就是374个扇区？
+1. 这里在读取完setup section(4个sectors)，并不是像很多书上说的读240个扇区，而是读了0x30000个字节，也就是384个扇区？
 
 {% include JB/setup %}

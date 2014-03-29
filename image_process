@@ -1,13 +1,24 @@
 #!/bin/bash
-# copy image from SOURCE folder to DESTINATION folder
-# conver the size if it width > 580
 
-SOURCE = "~/Pictures"
-DESTINATION = "./assets/images/"
+current=`pwd`
+src="${HOME}/Pictures"
+dest="${current}/assets/images/"
 
-IMAGES = find ${SOURCE} -name "*.png" -mtime -1
+images=`find ${src} -name "*.png" -mtime -1`
 
-cp ${IMAGES} ${DESTINATION}
+mkdir -p ${dest}
 
+if [ 0 -ne ${#images} ]
+then
+
+	cp -t ${dest} ${images}
+
+	for img in ${images}
+	do
+		convert -resize "580>" ${img} ${dest}${img##*/}
+	done
+else
+	echo 'nothing to process.'
+fi
 
 
