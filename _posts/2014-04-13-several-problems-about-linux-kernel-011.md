@@ -713,4 +713,14 @@ Process 0 creates Process 1 throuth the function `fork()`. During the time, Proc
 And the Process 0 and Process 1 share the same code.When transferring program control to the Porcess 1, it just executes the instruction pointed by `CS:EIP`.
 Therefore, the funtion `fork()` seems to be executed twice. In fact, the Process 0 executes the whole of function `fork()` while the Process 1 executes the rest of function `fork()`, which is the part from `int 0x80` to the end.
 
+### Reference 
+
+[1] The Art of Linux Kernel Design, Second Edition.
+
+[2] [IA-32 Architectures Software Developer vol-3a-part-1 Manual](http://www.intel.com/content/www/us/en/processors/architectures-software-developer-manuals.html?iid=tech_vt_tech+64-32_manuals)
+
+[3] [Wikipedia](https://www.wikipedia.org/)
+
+[4] [IA-32 Assembly Language Reference Manual](http://docs.oracle.com/cd/E19455-01/806-3773/instructionset-73/index.html)
+
 {% include JB/setup %}
