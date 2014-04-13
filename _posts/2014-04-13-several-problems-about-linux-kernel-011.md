@@ -10,6 +10,7 @@ tagline: "\nfrom the Art of Linux Kernel Design"
 	There are several problems, which deserve being thought carefully, about linux kernel(version 0.11).
 	I will not give detail answers to the following questions, but give a brief outline for each question.
 	I do NOT promise the answers is exactly correct. 
+	if you find any mistake, please email liuxuebao AT ict.ac.cn. Thank you!
 	Have fun!
 	Good luck!
 
