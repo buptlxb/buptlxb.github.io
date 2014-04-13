@@ -1,10 +1,10 @@
 ---
 layout: post
-title: "Several Problems about Linux Kernel 0.11"
+title: "Several Problems about Linux Kernel"
 description: ""
 category: "Linux"
 tags: ["linux", "os"]
-tagline: "\nfrom the Art of Linux Kernel Design"
+tagline: "version 0.11"
 ---
 
 	There are several problems, which deserve being thought carefully, about linux kernel(version 0.11).
