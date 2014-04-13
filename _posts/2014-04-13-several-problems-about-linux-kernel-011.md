@@ -26,8 +26,7 @@ The code contained in BIOS will be executed first to boot the OS in the external
 
 ---
 
-#### 2. Why BIOS just loads the first sector of the disk, which is so-called bootsect, and the successive sectors is loaded by bootsect?
-Why not load all sectors through the BIOS?
+#### 2. Why BIOS just loads the first sector of the disk, which is so-called bootsect, and the successive sectors is loaded by bootsect? Why not load all sectors through the BIOS?
 
 It might be `historical reasons` that Only the first sector of the disk is loaded by BIOS.Why not the second one, the third one and so on? It is just a convention.
 
