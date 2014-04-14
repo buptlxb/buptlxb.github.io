@@ -241,7 +241,9 @@ According to the calling convension, the registers (`ebp`, `ebx`, `edi`, `esi`) 
 
 ### _Notice: 2.12 and 2.13 shows the registers change and stack switch!!!_
 
-## Conclusion
+---
+
+## 3. Conclusion
 
 1. The `user_stack` is used by kernel before Process 0 `move to user mode`.
 
