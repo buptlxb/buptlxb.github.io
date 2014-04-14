@@ -243,12 +243,12 @@ According to the calling convension, the registers (`ebp`, `ebx`, `edi`, `esi`) 
 
 ## Conclusion
 
-The `user_stack` is used by kernel before Process 0 `move to user mode`.
+1. The `user_stack` is used by kernel before Process 0 `move to user mode`.
 
-The `user_stack` is used as `Privilege 3 stack` (so-called `user stack` of Porcess 0) by Process 0 after it `move to user mode`.
+2. The `user_stack` is used as `Privilege 3 stack` (so-called `user stack` of Porcess 0) by Process 0 after it `move to user mode`.
 
-When Process 0 executes `int 0x80`, the hardware will switch stack to `Privilege 0` stack (so-called `kernel stack` of Porcess 0) along with Privilege changing from `3` to `0`.
+3. When Process 0 executes `int 0x80`, the hardware will switch stack to `Privilege 0` stack (so-called `kernel stack` of Porcess 0) along with Privilege changing from `3` to `0`.
 
-The Process 0 and Process 1 share the `user_stack` as their `user stack`.
+4. The Process 0 and Process 1 share the `user_stack` as their `user stack`.
 
 {% include JB/setup %}
