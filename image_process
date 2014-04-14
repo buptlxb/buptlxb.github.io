@@ -4,7 +4,8 @@ current=`pwd`
 src="${HOME}/Pictures"
 dest="${current}/assets/images/"
 
-images=`find ${src} -name "*.png" -mtime -1`
+#images=`find ${src} -name "*.png" -mtime -1`
+images=`find ${src} -name "*.png"`
 
 mkdir -p ${dest}
 
