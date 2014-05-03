@@ -18,4 +18,5 @@ tags: ["ubuntu", "linux"]
 	sudo apt-get update
 
 最后耐心等待即可。
+
 {% include JB/setup %}
