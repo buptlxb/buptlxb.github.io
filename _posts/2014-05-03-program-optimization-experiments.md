@@ -30,7 +30,8 @@ typedef double(* MATRIX)[DIM];
 
 void multiply(MATRIX z, const MATRIX x, const MATRIX y, int dim)
 {
-    int row, col, idx, tmp;
+    int row, col, idx;
+    double tmp;
     for (row = 0; row < dim; row++)
         for (col = 0; col < dim; col++) {
             tmp = 0;
@@ -90,15 +91,15 @@ int main(void)
 ```bash
 ict-lxb@ictlxb-Zhaoyang-E49:~/Workspace/test$ ./matrix
 4096 matrix multiply
-time : 1065s    speed: 129.03 MFLOPS
+time : 1038s    speed: 132.39 MFLOPS
 ```
 
 ##### 1.2.2 -O2 Optimization
 
 ```bash
-ict-lxb@ictlxb-Zhaoyang-E49:~/Workspace/test$ ./matrix
+ict-lxb@ictlxb-Zhaoyang-E49:~/Workspace/test$ ./matrix_O2 
 4096 matrix multiply
-time : 813s speed: 169.03 MFLOPS
+time : 944s speed: 145.57 MFLOPS
 ```
 
 #### 1.3 Conclusion
@@ -115,6 +116,7 @@ on.
 #### 2.1 Source Code
 
 ```c
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
@@ -126,7 +128,8 @@ typedef double(* MATRIX)[DIM];
 
 void multiply(MATRIX z, const MATRIX x, const MATRIX y, int dim)
 {
-    int row, col, idx, tmp;
+    int row, col, idx;
+    double tmp;
     for (row = 0; row < dim; row++)
         for (col = 0; col < dim; col++) {
             tmp = 0;
@@ -168,10 +171,12 @@ int main(void)
     init_matrix(z, DIM, 0);
     struct timeval start, end;
     gettimeofday(&start, NULL);
-    multiply(z, x, y, DIM);
+    multiply(z, x, y, DIM-1);
     gettimeofday(&end, NULL);
     int time = (int)(end.tv_sec-start.tv_sec);
-    unsigned long long opts = (unsigned long long)DIM*DIM*(2*DIM-1);
+    //unsigned long long opts = (unsigned long long)DIM*DIM*(2*DIM-1);
+    int n = DIM-1;
+    unsigned long long opts = (unsigned long long)n*n*(2*n-1);
     double speed = opts / (double)(time * 1000000);
     printf("%d matrix multiply\n", DIM);
     printf("time : %ds\tspeed: %.2f MFLOPS\n", time, speed);
@@ -182,29 +187,14 @@ int main(void)
 #### 2.2 Results
 
 ```c
-
-ict-lxb@ictlxb-Zhaoyang-E49:~/Workspace/test$ ./matrix
+ict-lxb@ictlxb-Zhaoyang-E49:~/Workspace/test$ ./matrix_4097 
 4097 matrix multiply
-time : 801s speed: 171.69 MFLOPS
-
-ict-lxb@ictlxb-Zhaoyang-E49:~/Workspace/test$ ./matrix
-4097 matrix multiply
-time : 880s speed: 156.28 MFLOPS
-
-ict-lxb@ictlxb-Zhaoyang-E49:~/Workspace/test$ ./matrix
-4097 matrix multiply
-time : 795s speed: 172.98 MFLOPS
-
+time : 901s speed: 152.52 MFLOPS
 ```
-
-**Average Time: 825s; Average Speed: 166.98 MFLOPS**
-
 #### 2.3 Conclusion
-After analysing the results above, we can see that the performance migth vary
-from time to time. Comparing the average time with the time of Experiment One,
-we can see that the time does not increase too much and the FLOPS decreases a
-little. The reasom might be the cache miss rates increase a bit.
-
+After analysing the results above, we can see that the performance was improved
+due in large part to cache miss rate decreasing. 4097 matrix might decrease the
+collision of cache line becuase of its irregular layout.
 ---
 
 ### 3 Three Loops Resulotion With Transpose
@@ -219,16 +209,15 @@ little. The reasom might be the cache miss rates increase a bit.
 #include <string.h>
 #include <sys/time.h>
 
-#define DIM 4097
+#define DIM 4096
 typedef double(* MATRIX)[DIM];
 
 void transpose(MATRIX m, int dim)
 {
-    int row, col, tmp;
-    for (row = 0; row < dim; row++)
-        for (col = 0; col < dim; col++) {
-            if (col == row)
-                continue;
+    int row, col;
+    double tmp;
+    for (row = 1; row < dim; row++)
+        for (col = 0; col < row; col++) {
             tmp = m[row][col];
             m[row][col] = m[col][row];
             m[col][row] = tmp;
@@ -238,7 +227,8 @@ void transpose(MATRIX m, int dim)
 void multiply(MATRIX z, const MATRIX x, const MATRIX y, int dim)
 {
 
-    int row, col, idx, tmp;
+    int row, col, idx;
+    double tmp;
     transpose(y, dim);
     for (row = 0; row < dim; row++)
         for (col = 0; col < dim; col++) {
@@ -296,22 +286,10 @@ int main(void)
 #### 3.2 Results
 
 ```bash
-
-ict-lxb@ictlxb-Zhaoyang-E49:~/Workspace/test$ ./matrix_transpose 
-4097 matrix multiply
-time : 234s speed: 587.70 MFLOPS
-
-ict-lxb@ictlxb-Zhaoyang-E49:~/Workspace/test$ ./matrix_transpose 
-4097 matrix multiply
-time : 235s speed: 585.20 MFLOPS
-
-ict-lxb@ictlxb-Zhaoyang-E49:~/Workspace/test$ ./matrix_transpose 
-4097 matrix multiply
-time : 234s speed: 587.70 MFLOPS
-
+ct-lxb@ictlxb-Zhaoyang-E49:~/Workspace/test$ ./matrix_transpose 
+4096 matrix multiply
+time : 72s  speed: 1908.64 MFLOPS
 ```
-
-**Average Time: 234.33s; Average Speed: 586.87 MFLOPS**
 
 #### 3.3 Conclusion
 After analysing the results above, we can see that the performance is improved
@@ -333,7 +311,7 @@ locality and spatial locality is the key point in this improvement.
 #include <string.h>
 #include <sys/time.h>
 
-#define B 512
+#define B 128
 #define DIM 4096
 typedef double(* MATRIX)[DIM];
 
@@ -341,7 +319,8 @@ typedef double(* MATRIX)[DIM];
 
 void multiply(MATRIX z, const MATRIX x, const MATRIX y, int dim)
 {
-    int row, col, idx, ri, ci, tmp;
+    int row, col, idx, ri, ci;
+    double tmp;
     for (row = 0; row < dim; row+=B)
         for (col = 0; col < dim; col+=B)
             for (ri = 0; ri < dim; ri++)
@@ -413,7 +392,6 @@ int main(void)
 #endif
     return 0;
 }
-
 ```
 
 #### 4.2 Results
@@ -451,7 +429,7 @@ misses.
 
 #define CORES 2
 #define THREADS 4
-#define WORKERS (16)
+#define WORKERS (THREADS)
 
 
 #define DIM 4096
@@ -480,11 +458,10 @@ void print_matrix(MATRIX m, int dim)
 
 void transpose(MATRIX m, int dim)
 {
-    int row, col, tmp;
-    for (row = 0; row < dim; row++)
-        for (col = 0; col < dim; col++) {
-            if (col <= row)
-                continue;
+    int row, col;
+    double tmp;
+    for (row = 1; row < dim; row++)
+        for (col = 0; col < row; col++) {
             tmp = m[row][col];
             m[row][col] = m[col][row];
             m[col][row] = tmp;
@@ -493,13 +470,15 @@ void transpose(MATRIX m, int dim)
 
 void multiply(MATRIX z, const MATRIX x, const MATRIX y, int row_offset)
 {
-    int row, col, idx, tmp;
-    for (row = 0; row < COL; row++)
+    int row, col, idx;
+    double tmp;
+    int end = row_offset + COL;
+    for (row = row_offset; row < end; row++)
         for (col = 0; col < DIM; col++) {
             tmp = 0;
             for (idx = 0; idx < DIM; idx++)
-                tmp += x[row+row_offset][idx] * y[col][idx];
-            z[row+row_offset][col] = tmp;
+                tmp += x[row][idx] * y[col][idx];
+            z[row][col] = tmp;
         }
 }
 
@@ -551,45 +530,42 @@ int main(void)
     printf("time : %ds\tspeed: %.2f MFLOPS\n", time, speed);
     return 0;
 }
-
 ```
 
 #### 6.2 Results
 
 ```bash
-
 ict-lxb@ictlxb-Zhaoyang-E49:~/Workspace/test$ ./matrix_pthread 
 4096 matrix multiply with 2 workers
-time : 125s speed: 1099.38 MFLOPS
+time : 49s  speed: 2804.53 MFLOPS
 
 ict-lxb@ictlxb-Zhaoyang-E49:~/Workspace/test$ ./matrix_pthread 
 4096 matrix multiply with 4 workers
-time : 65s  speed: 2114.19 MFLOPS
+time : 31s  speed: 4432.97 MFLOPS
 
 ict-lxb@ictlxb-Zhaoyang-E49:~/Workspace/test$ ./matrix_pthread 
 4096 matrix multiply with 8 workers
-time : 64s  speed: 2147.22 MFLOPS
+time : 44s  speed: 3123.23 MFLOPS
 
 ict-lxb@ictlxb-Zhaoyang-E49:~/Workspace/test$ ./matrix_pthread 
 4096 matrix multiply with 16 workers
-time : 64s  speed: 2147.22 MFLOPS
+time : 43s  speed: 3195.86 MFLOPS
 
 ...
 
 ict-lxb@ictlxb-Zhaoyang-E49:~/Workspace/test$ ./matrix_pthread 
 4096 matrix multiply with 4096 workers
-time : 66s  speed: 2082.15 MFLOPS
-
+time : 42s  speed: 3271.96 MFLOPS
 ```
-* rate = 234 / 125 = 1.87
+* rate = 72 / 49 = 1.47
 
-* rate = 234 / 65 = 3.60
+* rate = 72 / 31 = 2
 
-* rate = 234 / 64 = 3.66
+* rate = 72 / 44 = 1.64
 
 #### 6.3 Conclusion
 After analysing the results above, we can see that the performance is imporved
-so much that 4096 matrix multiply with 16 workers took only 64 seconds.
+so much that 4096 matrix multiply with 16 workers took only 43 seconds.
 Parallel optimization can improve the performance in a reasonable way. However,
 With the number of workers increasing, the performance did not decrease as
 expected, I guess thread switch might be optimized so well that the cost could
