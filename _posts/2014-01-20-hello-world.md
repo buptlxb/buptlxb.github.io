@@ -7,6 +7,8 @@ tags: ["C/CPP"]
 tagline: "in c language"
 ---
 
+Test without jekyll installed 
+
 ```c
 #include <stdio.h>
 
